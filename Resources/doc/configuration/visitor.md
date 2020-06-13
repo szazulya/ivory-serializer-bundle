@@ -6,7 +6,7 @@ handle this specific use case.
 
 ## Built-in
 
-The bundle integrates all the [Serializer visitors](https://github.com/egeloen/ivory-serializer/blob/master/doc/visitor.md).
+The bundle integrates all the [Serializer visitors](https://github.com/bresam/ivory-serializer/blob/master/doc/visitor.md).
 
 ## Configuration
 

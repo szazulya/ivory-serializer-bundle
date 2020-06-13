@@ -1,7 +1,7 @@
-version: '2'
+version: '3.5'
 
 services:
-    php: &php
+    php:
         build: docker/php
         env_file:
             - .env
@@ -11,6 +11,3 @@ services:
         volumes:
             - ~/.composer:/var/www/.composer
             - .:/var/www/html
-    hhvm:
-        <<: *php
-        build: docker/hhvm

@@ -1,7 +1,7 @@
 # Event
 
 The bundle supports events and allows you to hook into the (de)-serialization process. If you want to learn more about 
-the supported events, you can read this [documentation](https://github.com/egeloen/ivory-serializer/blob/master/doc/event.md).
+the supported events, you can read this [documentation](https://github.com/bresam/ivory-serializer/blob/master/doc/event.md).
 
 ## Register a listener
 

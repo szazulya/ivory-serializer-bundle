@@ -1,6 +1,6 @@
 # Usage
 
-The bundle just integrates the [Ivory Serializer](https://github.com/egeloen/ivory-serializer) library into Symfony.
+The bundle just integrates the [Ivory Serializer](https://github.com/bresam/ivory-serializer) library into Symfony.
 In order to use the library, you can fetch the serializer from the container and use it for serializing or 
 deserializing your data:
 

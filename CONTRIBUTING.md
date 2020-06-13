@@ -30,11 +30,11 @@ If you're here, you are going to fix a bug and you're the best! To do it, first 
 create a new branch with the following commands:
 
 ``` bash
-$ git clone git@github.com:your-name/IvorySerializerBundle.git
+$ git clone git@github.com:your-name/ivory-serializer-bundle.git
 $ git checkout -b bug-fix-description
 ```
 
-Then, we recommend to use [Docker](https://www.docker.com) and follow this [instructions](/Resources/doc/docker.md) in
+Then, we recommend to use [Docker](https://www.docker.com) and follow this [instructions](/Resources/doc/development_environment.md) in
 order to set up the project.
 
 When you're on the new branch with the dependencies, code as much as you want and when the fix is ready, don't commit
@@ -58,7 +58,7 @@ $ git rebase -i HEAD~3
 If your branch conflicts with the master branch, you will need to rebase and repush it with the following commands:
 
 ``` bash
-$ git remote add upstream git@github.com:egeloen/IvorySerializerBundle.git
+$ git remote add upstream git@github.com:bresam/ivory-serializer-bundle.git
 $ git pull --rebase upstream master
 $ git push origin bug-fix-description -f
 ```
