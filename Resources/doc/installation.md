@@ -18,7 +18,7 @@ $ sudo mv composer.phar /usr/local/bin/composer
 Require the bundle in your `composer.json` file:
 
 ``` bash
-$ composer require egeloen/serializer-bundle
+$ composer require ivory/serializer-bundle
 ```
 
 ## Register the bundle

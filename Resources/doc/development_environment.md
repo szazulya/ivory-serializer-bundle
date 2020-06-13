@@ -1,4 +1,4 @@
-# Docker
+# Development Environment
 
 The most easy way to set up the project is to install [Docker](https://www.docker.com) and
 [Docker Composer](https://docs.docker.com/compose/) and build the project.
@@ -38,12 +38,6 @@ To run the test suite, you can use:
 $ docker-compose run --rm php vendor/bin/phpunit
 ```
 
-If you want to run the test suite against [HHVM](http://hhvm.com/), you can use:
-
-``` bash
-$ docker-compose run --rm hhvm vendor/bin/phpunit
-```
-
 ## XDebug
 
 If you want to use XDebug, make sure you have fully configured your `.env` file and use:
@@ -51,3 +45,21 @@ If you want to use XDebug, make sure you have fully configured your `.env` file 
 ``` bash
 $ docker-compose run --rm -e XDEBUG=1 php vendor/bin/phpunit
 ```
+
+## Tests with PHP Storm integration
+
+Configure PHP Storm for Docker (just create your config):
+
+![alt text](./docker/docker-config.png)
+
+
+Create a Docker Compose Remote CLI Interpreter:
+
+Preferences > Language & Frameworks > PHP 
+
+![alt text](./docker/remote-php-interpreter.png)
+
+
+Your Config should look like this:
+
+![alt text](./docker/cli_interpreter.png)

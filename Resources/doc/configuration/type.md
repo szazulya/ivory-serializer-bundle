@@ -5,7 +5,7 @@ mandatory except for deserializing but it is highly recommended to configure it 
 
 ## Built-in
 
-The bundle integrates all the [Serializer types](https://github.com/egeloen/ivory-serializer/blob/master/doc/type.md)
+The bundle integrates all the [Serializer types](https://github.com/bresam/ivory-serializer/blob/master/doc/type.md)
 and also support the following types (available via the bundle):
 
 | Type                                   | Description                             |

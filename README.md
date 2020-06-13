@@ -1,18 +1,11 @@
 # README
 
-[![Travis Build Status](https://travis-ci.org/egeloen/IvorySerializerBundle.svg?branch=master)](http://travis-ci.org/egeloen/IvorySerializerBundle)
-[![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/8ydvhbgwsy0k39ux/branch/master?svg=true)](https://ci.appveyor.com/project/egeloen/ivoryserializerbundle/branch/master)
-[![Code Coverage](https://scrutinizer-ci.com/g/egeloen/IvorySerializerBundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/egeloen/IvorySerializerBundle/?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/egeloen/IvorySerializerBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/egeloen/IvorySerializerBundle/?branch=master)
-[![Dependency Status](http://www.versioneye.com/php/egeloen:serializer-bundle/badge.svg)](http://www.versioneye.com/php/egeloen:serializer-bundle)
+[![Travis Build Status](https://api.travis-ci.com/bresam/ivory-serializer-bundle.svg?branch=master)](https://travis-ci.com/github/bresam/ivory-serializer-bundle)
+[![Code Coverage](https://scrutinizer-ci.com/g/bresam/ivory-serializer-bundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/bresam/ivory-serializer-bundle/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bresam/ivory-serializer-bundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/bresam/ivory-serializer-bundle/?branch=master)
 
-[![Latest Stable Version](https://poser.pugx.org/egeloen/serializer-bundle/v/stable.svg)](https://packagist.org/packages/egeloen/serializer-bundle)
-[![Latest Unstable Version](https://poser.pugx.org/egeloen/serializer-bundle/v/unstable.svg)](https://packagist.org/packages/egeloen/serializer-bundle)
-[![Total Downloads](https://poser.pugx.org/egeloen/serializer-bundle/downloads.svg)](https://packagist.org/packages/egeloen/serializer-bundle)
-[![License](https://poser.pugx.org/egeloen/serializer-bundle/license.svg)](https://packagist.org/packages/egeloen/serializer-bundle)
-
-The bundle provides an integration of the [Ivory Serializer](https://github.com/egeloen/ivory-serializer) library for
-your Symfony2 project.
+The bundle provides an integration of the [Ivory Serializer](https://github.com/bresam/ivory-serializer) library for
+your Symfony project.
 
 ``` php
 use Ivory\Serializer\Format;
