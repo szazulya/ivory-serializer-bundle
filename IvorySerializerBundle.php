@@ -11,6 +11,7 @@
 
 namespace Ivory\SerializerBundle;
 
+use Ivory\SerializerBundle\DependencyInjection\Compiler\PublicForTestsCompilerPass;
 use Ivory\SerializerBundle\DependencyInjection\Compiler\RegisterCachePoolPass;
 use Ivory\SerializerBundle\DependencyInjection\Compiler\RegisterClassMetadataLoaderPass;
 use Ivory\SerializerBundle\DependencyInjection\Compiler\RegisterFOSServicePass;
@@ -36,6 +37,7 @@ class IvorySerializerBundle extends Bundle
             ->addCompilerPass(new RegisterListenerPass())
             ->addCompilerPass(new RegisterFOSServicePass())
             ->addCompilerPass(new RegisterTypePass())
-            ->addCompilerPass(new RegisterVisitorPass());
+            ->addCompilerPass(new RegisterVisitorPass())
+            ->addCompilerPass(new PublicForTestsCompilerPass());
     }
 }

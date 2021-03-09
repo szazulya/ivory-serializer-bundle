@@ -40,8 +40,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = $this->createTreeBuilder();
-        $treeBuilder->root('ivory_serializer')
+        $treeBuilder = $this->createTreeBuilder('ivory_serializer');
+        $treeBuilder->getRootNode()
             ->children()
             ->append($this->createEventNode())
             ->append($this->createMappingNode())
@@ -172,21 +172,13 @@ class Configuration implements ConfigurationInterface
             ->end();
     }
 
-    /**
-     * @param string $name
-     *
-     * @return ArrayNodeDefinition
-     */
-    private function createNode($name)
+    private function createNode(string $name = null, string $type = 'array'): ArrayNodeDefinition
     {
-        return $this->createTreeBuilder()->root($name);
+        return $this->createTreeBuilder($name, $type)->getRootNode();
     }
 
-    /**
-     * @return TreeBuilder
-     */
-    private function createTreeBuilder()
+    private function createTreeBuilder(string $name = null, string $type = 'array'): TreeBuilder
     {
-        return new TreeBuilder();
+        return new TreeBuilder($name, $type);
     }
 }

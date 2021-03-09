@@ -3,7 +3,7 @@
 set -e
 
 DOCKER_BUILD=${DOCKER_BUILD-false}
-TRAVIS_PHP_VERSION=${TRAVIS_PHP_VERSION-7.0}
+TRAVIS_PHP_VERSION=${TRAVIS_PHP_VERSION-7.4}
 
 if [ "$DOCKER_BUILD" = false ]; then
     wget https://scrutinizer-ci.com/ocular.phar

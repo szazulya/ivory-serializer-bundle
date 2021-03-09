@@ -18,12 +18,13 @@ use Ivory\Serializer\Mapping\Loader\DirectoryClassMetadataLoader;
 use Ivory\Serializer\Mapping\Loader\ReflectionClassMetadataLoader;
 use Ivory\SerializerBundle\CacheWarmer\SerializerCacheWarmer;
 use Ivory\SerializerBundle\Tests\Fixtures\Bundle\Model\Model;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 /**
  * @author GeLo <geloen.eric@gmail.com>
  */
-class SerializerCacheWarmerTest extends \PHPUnit_Framework_TestCase
+class SerializerCacheWarmerTest extends TestCase
 {
     /**
      * @var ArrayAdapter
@@ -33,30 +34,30 @@ class SerializerCacheWarmerTest extends \PHPUnit_Framework_TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->pool = new ArrayAdapter();
     }
 
-    public function testWarmUpWithMappedLoader()
+    public function testWarmUpWithMappedLoader(): void
     {
         $cacheWarmer = $this->createCacheWarmer();
         $cacheWarmer->warmUp(sys_get_temp_dir());
 
-        $this->assertTrue($this->pool->hasItem(strtr(Model::class, '\\', '_')));
+        self::assertTrue($this->pool->hasItem(str_replace('\\', '_', Model::class)));
     }
 
-    public function testWarmUpWithAnonymousLoader()
+    public function testWarmUpWithAnonymousLoader(): void
     {
         $cacheWarmer = $this->createCacheWarmer(new ReflectionClassMetadataLoader());
         $cacheWarmer->warmUp(sys_get_temp_dir());
 
-        $this->assertFalse($this->pool->hasItem(strtr(Model::class, '\\', '_')));
+        self::assertFalse($this->pool->hasItem(str_replace('\\', '_', Model::class)));
     }
 
-    public function testOptional()
+    public function testOptional(): void
     {
-        $this->assertTrue($this->createCacheWarmer()->isOptional());
+        self::assertTrue($this->createCacheWarmer()->isOptional());
     }
 
     /**
@@ -64,7 +65,7 @@ class SerializerCacheWarmerTest extends \PHPUnit_Framework_TestCase
      *
      * @return SerializerCacheWarmer
      */
-    private function createCacheWarmer(ClassMetadataLoaderInterface $loader = null)
+    private function createCacheWarmer(ClassMetadataLoaderInterface $loader = null): SerializerCacheWarmer
     {
         $loader = $loader ?: new DirectoryClassMetadataLoader(__DIR__.'/../Fixtures/Mapping');
         $factory = new CacheClassMetadataFactory(new ClassMetadataFactory($loader), $this->pool);

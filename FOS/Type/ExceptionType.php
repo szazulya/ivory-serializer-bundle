@@ -58,7 +58,7 @@ class ExceptionType extends AbstractExceptionNormalizer implements TypeInterface
             }
         }
 
-        $result['message'] = $this->getExceptionMessage($exception, $result['code']);
+        $result['message'] = $this->getMessageFromThrowable($exception, $result['code']);
 
         if ($this->debug) {
             $result['exception'] = $this->serializeException($exception);

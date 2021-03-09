@@ -17,6 +17,8 @@ use Ivory\Serializer\Registry\TypeRegistry;
 use Ivory\Serializer\Serializer;
 use Ivory\SerializerBundle\Type\FormErrorType;
 use Ivory\SerializerBundle\Type\FormType;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\FormType as SymfonyFormType;
@@ -30,7 +32,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 /**
  * @author GeLo <geloen.eric@gmail.com>
  */
-class FormTypeTest extends \PHPUnit_Framework_TestCase
+class FormTypeTest extends TestCase
 {
     /**
      * @var Serializer
@@ -38,26 +40,26 @@ class FormTypeTest extends \PHPUnit_Framework_TestCase
     private $serializer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|TranslatorInterface
+     * @var MockObject|TranslatorInterface
      */
     private $translator;
 
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->translator = $this->createMock(TranslatorInterface::class);
 
         $this->translator
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('trans')
-            ->will($this->returnArgument(0));
+            ->will(self::returnArgument(0));
 
         $this->translator
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('transChoice')
-            ->will($this->returnArgument(1));
+            ->will(self::returnArgument(1));
 
         $this->serializer = new Serializer(new Navigator(TypeRegistry::create([
             FormInterface::class => new FormType(),
@@ -66,66 +68,54 @@ class FormTypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $name
-     * @param string $data
-     * @param string $format
-     *
      * @dataProvider serializeProvider
      */
-    public function testSerialize($name, $data, $format)
+    public function testSerialize(string $name, $data, string $format): void
     {
-        $this->assertSame($this->getDataSet($name, $format), $this->serializer->serialize($data, $format));
+        self::assertSame($this->getDataSet($name, $format), $this->serializer->serialize($data, $format));
     }
 
     /**
-     * @param string $name
-     * @param string $data
-     * @param string $format
-     *
      * @dataProvider formErrorProvider
      */
-    public function testSerializeFormErrorWithoutTranslator($name, $data, $format)
+    public function testSerializeFormErrorWithoutTranslator(string $name, $data, string $format): void
     {
         $this->serializer = new Serializer(new Navigator(TypeRegistry::create([
             FormError::class => new FormErrorType(),
         ])));
 
-        $this->assertSame(
+        self::assertSame(
             $this->getDataSet($name.'_no_translator', $format),
             $this->serializer->serialize($data, $format)
         );
     }
 
     /**
-     * @param string $format
-     *
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Deserializing a "Symfony\Component\Form\Form" is not supported.
-     *
      * @dataProvider formatProvider
      */
-    public function testDeserializeForm($format)
+    public function testDeserializeForm(string $format): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Deserializing a "Symfony\Component\Form\Form" is not supported.');
+
         $this->serializer->deserialize($this->getDataSet('form', $format), Form::class, $format);
     }
 
     /**
-     * @param string $format
-     *
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Deserializing a "Symfony\Component\Form\FormError" is not supported.
-     *
      * @dataProvider formatProvider
      */
-    public function testDeserializeFormError($format)
+    public function testDeserializeFormError(string $format): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Deserializing a "Symfony\Component\Form\FormError" is not supported.');
+
         $this->serializer->deserialize($this->getDataSet('form', $format), FormError::class, $format);
     }
 
     /**
      * @return mixed[]
      */
-    public function serializeProvider()
+    public function serializeProvider(): array
     {
         $factory = Forms::createFormFactory();
         $preferFQCN = method_exists(AbstractType::class, 'getBlockPrefix');
@@ -158,18 +148,12 @@ class FormTypeTest extends \PHPUnit_Framework_TestCase
         ]));
     }
 
-    /**
-     * @return mixed[]
-     */
-    public function formErrorProvider()
+    public function formErrorProvider(): array
     {
         return $this->expandCases($this->formErrorCases());
     }
 
-    /**
-     * @return string[][]
-     */
-    public function formatProvider()
+    public function formatProvider(): array
     {
         return [
             [Format::CSV],
@@ -179,14 +163,11 @@ class FormTypeTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @return mixed[]
-     */
-    private function formErrorCases()
+    private function formErrorCases(): array
     {
         $formError = new FormError('error');
         $translatedFormError = new FormError('trans_error', 'trans', []);
-        $pluralizedFormError = new FormError('plural_error', 'trans', [], 'plural');
+        $pluralizedFormError = new FormError('plural_error', 'trans', [], 2);
 
         return [
             ['form_error', $formError],
@@ -195,12 +176,7 @@ class FormTypeTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @param mixed[] $cases
-     *
-     * @return mixed[]
-     */
-    private function expandCases(array $cases)
+    private function expandCases(array $cases): array
     {
         $providers = [];
 
@@ -214,17 +190,11 @@ class FormTypeTest extends \PHPUnit_Framework_TestCase
         return $providers;
     }
 
-    /**
-     * @param string $name
-     * @param string $format
-     *
-     * @return string
-     */
-    private function getDataSet($name, $format)
+    private function getDataSet(string $name, string $format): string
     {
         $extension = $format;
 
-        if ($extension === Format::YAML) {
+        if (Format::YAML === $extension) {
             $extension = 'yml';
         }
 

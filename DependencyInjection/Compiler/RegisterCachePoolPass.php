@@ -12,8 +12,8 @@
 namespace Ivory\SerializerBundle\DependencyInjection\Compiler;
 
 use Ivory\Serializer\Mapping\Factory\CacheClassMetadataFactory;
-use Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\CachePoolPass;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\Cache\DependencyInjection\CachePoolPass;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -35,7 +35,7 @@ class RegisterCachePoolPass implements CompilerPassInterface
 
         $classMetadataFactory = $container->getDefinition($classMetadataFactoryService);
 
-        if ($classMetadataFactory->getClass() !== CacheClassMetadataFactory::class) {
+        if (CacheClassMetadataFactory::class !== $classMetadataFactory->getClass()) {
             return;
         }
 

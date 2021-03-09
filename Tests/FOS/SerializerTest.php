@@ -21,11 +21,13 @@ use Ivory\Serializer\Exclusion\VersionExclusionStrategy;
 use Ivory\Serializer\Format;
 use Ivory\Serializer\SerializerInterface;
 use Ivory\SerializerBundle\FOS\Serializer;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author GeLo <geloen.eric@gmail.com>
  */
-class SerializerTest extends \PHPUnit_Framework_TestCase
+class SerializerTest extends TestCase
 {
     /**
      * @var Serializer
@@ -33,20 +35,20 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
     private $serializer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface
+     * @var MockObject|SerializerInterface
      */
     private $innerSerializer;
 
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->innerSerializer = $this->createSerializerMock();
         $this->serializer = new Serializer($this->innerSerializer);
     }
 
-    public function testIgnoreNull()
+    public function testIgnoreNull(): void
     {
         $context = new FOSContext();
         $context->setSerializeNull(false);
@@ -58,7 +60,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         $this->assertContext($context, $callback);
     }
 
-    public function testGroups()
+    public function testGroups(): void
     {
         $context = new FOSContext();
         $context->setGroups(['foo', 'bar']);
@@ -70,7 +72,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         $this->assertContext($context, $callback);
     }
 
-    public function testVersion()
+    public function testVersion(): void
     {
         $context = new FOSContext();
         $context->setVersion('1.0.0');
@@ -82,7 +84,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         $this->assertContext($context, $callback);
     }
 
-    public function testMaxDepth()
+    public function testMaxDepth(): void
     {
         $context = new FOSContext();
 
@@ -99,7 +101,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         $this->assertContext($context, $callback);
     }
 
-    public function testCustomExclusionStrategy()
+    public function testCustomExclusionStrategy(): void
     {
         $context = new FOSContext();
         $context->setAttribute(
@@ -114,7 +116,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         $this->assertContext($context, $callback);
     }
 
-    public function testCustomExclusionStrategies()
+    public function testCustomExclusionStrategies(): void
     {
         $context = new FOSContext();
         $context->setAttribute(
@@ -129,7 +131,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         $this->assertContext($context, $callback);
     }
 
-    public function testOptions()
+    public function testOptions(): void
     {
         $context = new FOSContext();
         $context->setAttribute('foo', 'bar');
@@ -141,7 +143,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         $this->assertContext($context, $callback);
     }
 
-    public function testInvalidExclusionStrategies()
+    public function testInvalidExclusionStrategies(): void
     {
         $context = new FOSContext();
         $context->setAttribute('ivory_exclusion_strategies', 'invalid');
@@ -152,7 +154,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testInvalidExclusionStrategy()
+    public function testInvalidExclusionStrategy(): void
     {
         $context = new FOSContext();
         $context->setAttribute('ivory_exclusion_strategies', ['invalid']);
@@ -164,42 +166,34 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @param FOSContext $context
-     * @param callable   $callback
-     */
     private function assertContext(FOSContext $context, callable $callback)
     {
         $this->innerSerializer
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('serialize')
             ->with(
-                $this->identicalTo($data = 'data'),
-                $this->identicalTo($format = Format::JSON),
-                $this->callback($callback)
+                self::identicalTo($data = 'data'),
+                self::identicalTo($format = Format::JSON),
+                self::callback($callback)
             )
-            ->will($this->returnValue($serializeResult = 'serialize'));
+            ->willReturn($serializeResult = 'serialize');
 
         $this->innerSerializer
             ->expects($this->once())
             ->method('deserialize')
             ->with(
-                $this->identicalTo($data),
-                $this->identicalTo($type = 'type'),
-                $this->identicalTo($format),
-                $this->callback($callback)
+                self::identicalTo($data),
+                self::identicalTo($type = 'type'),
+                self::identicalTo($format),
+                self::callback($callback)
             )
-            ->will($this->returnValue($deserializeResult = 'deserialize'));
+            ->willReturn($deserializeResult = 'deserialize');
 
-        $this->assertSame($serializeResult, $this->serializer->serialize($data, $format, $context));
-        $this->assertSame($deserializeResult, $this->serializer->deserialize($data, $type, $format, $context));
+        self::assertSame($serializeResult, $this->serializer->serialize($data, $format, $context));
+        self::assertSame($deserializeResult, $this->serializer->deserialize($data, $type, $format, $context));
     }
 
-    /**
-     * @param FOSContext $context
-     * @param string     $message
-     */
-    private function assertInvalidContext(FOSContext $context, $message)
+    private function assertInvalidContext(FOSContext $context, string $message): void
     {
         $data = 'data';
         $type = 'type';
@@ -207,23 +201,23 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
 
         try {
             $this->serializer->serialize($data, $format, $context);
-            $this->fail();
+            self::fail();
         } catch (\Exception $e) {
-            $this->assertInstanceOf(\RuntimeException::class, $e);
-            $this->assertSame($message, $e->getMessage());
+            self::assertInstanceOf(\RuntimeException::class, $e);
+            self::assertSame($message, $e->getMessage());
         }
 
         try {
             $this->serializer->deserialize($data, $type, $format, $context);
-            $this->fail();
+            self::fail();
         } catch (\Exception $e) {
-            $this->assertInstanceOf(\RuntimeException::class, $e);
-            $this->assertSame($message, $e->getMessage());
+            self::assertInstanceOf(\RuntimeException::class, $e);
+            self::assertSame($message, $e->getMessage());
         }
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|SerializerInterface
+     * @return MockObject|SerializerInterface
      */
     private function createSerializerMock()
     {
@@ -231,7 +225,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ExclusionStrategyInterface
+     * @return MockObject|ExclusionStrategyInterface
      */
     private function createExclusionStrategyMock()
     {

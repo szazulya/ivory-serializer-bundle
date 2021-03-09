@@ -20,11 +20,13 @@ use Ivory\Serializer\Registry\TypeRegistry;
 use Ivory\Serializer\Serializer;
 use Ivory\Serializer\Type\Type;
 use Ivory\SerializerBundle\FOS\Type\ExceptionType;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author GeLo <geloen.eric@gmail.com>
  */
-class ExceptionTypeTest extends \PHPUnit_Framework_TestCase
+class ExceptionTypeTest extends TestCase
 {
     /**
      * @var Serializer
@@ -34,7 +36,7 @@ class ExceptionTypeTest extends \PHPUnit_Framework_TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->serializer = new Serializer(new Navigator(TypeRegistry::create([
             Type::EXCEPTION => new ExceptionType($this->createExceptionValueMapMock()),
@@ -42,58 +44,47 @@ class ExceptionTypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string                $name
-     * @param mixed                 $data
-     * @param string                $format
-     * @param ContextInterface|null $context
+     * @param mixed $data
      *
      * @dataProvider serializeProvider
      */
-    public function testSerialize($name, $data, $format, ContextInterface $context = null)
+    public function testSerialize(string $name, $data, string $format, ContextInterface $context = null): void
     {
-        $this->assertSame(
+        self::assertSame(
             $this->getDataSet($name, $format),
             $this->serializer->serialize($data, $format, $context)
         );
     }
 
     /**
-     * @param string                $name
-     * @param mixed                 $data
-     * @param string                $format
-     * @param ContextInterface|null $context
+     * @param mixed $data
      *
      * @dataProvider serializeProvider
      */
-    public function testSerializeDebug($name, $data, $format, ContextInterface $context = null)
+    public function testSerializeDebug(string $name, $data, string $format, ContextInterface $context = null): void
     {
         $this->serializer = new Serializer(new Navigator(TypeRegistry::create([
             Type::EXCEPTION => new ExceptionType($this->createExceptionValueMapMock(), true),
         ])));
 
-        $this->assertRegExp(
+        self::assertMatchesRegularExpression(
             '/^'.$this->getDataSet($name.'_debug', $format).'$/s',
             $this->serializer->serialize($data, $format, $context)
         );
     }
 
     /**
-     * @param string $format
-     *
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Deserializing an "Exception" is not supported.
-     *
      * @dataProvider formatProvider
      */
-    public function testDeserialize($format)
+    public function testDeserialize(string $format): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Deserializing an "Exception" is not supported.');
+
         $this->serializer->deserialize($this->getDataSet('exception_parent', $format), \Exception::class, $format);
     }
 
-    /**
-     * @return mixed[]
-     */
-    public function serializeProvider()
+    public function serializeProvider(): array
     {
         $parentException = new \Exception('Parent exception', 321);
         $childException = new \Exception('Child exception', 123, $parentException);
@@ -105,10 +96,7 @@ class ExceptionTypeTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
-    /**
-     * @return mixed[]
-     */
-    public function formatProvider()
+    public function formatProvider(): array
     {
         return [
             [Format::CSV],
@@ -119,19 +107,14 @@ class ExceptionTypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ExceptionValueMap
+     * @return MockObject|ExceptionValueMap
      */
     private function createExceptionValueMapMock()
     {
         return $this->createMock(ExceptionValueMap::class);
     }
 
-    /**
-     * @param mixed[] $cases
-     *
-     * @return mixed[]
-     */
-    private function expandCases(array $cases)
+    private function expandCases(array $cases): array
     {
         $providers = [];
 
@@ -149,17 +132,11 @@ class ExceptionTypeTest extends \PHPUnit_Framework_TestCase
         return $providers;
     }
 
-    /**
-     * @param string $name
-     * @param string $format
-     *
-     * @return string
-     */
-    private function getDataSet($name, $format)
+    private function getDataSet(string $name, string $format): string
     {
         $extension = $format;
 
-        if ($extension === Format::YAML) {
+        if (Format::YAML === $extension) {
             $extension = 'yml';
         }
 
