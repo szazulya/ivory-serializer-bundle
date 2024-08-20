@@ -16,7 +16,7 @@ use Ivory\Serializer\Direction;
 use Ivory\Serializer\Mapping\TypeMetadataInterface;
 use Ivory\Serializer\Type\TypeInterface;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @author GeLo <geloen.eric@gmail.com>
